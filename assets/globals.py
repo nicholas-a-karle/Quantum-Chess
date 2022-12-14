@@ -1,24 +1,34 @@
+#general
+EMPTY = -1
+EMPTY_COORDS = (-1, -1)
 
 #gate types
-EMPTY = -1
 I_GATE = 0
 H_GATE = 1
 X_GATE = 2
 Y_GATE = 3
 Z_GATE = 4
 T_GATE = 5
+CONTROL = 100 #indicate taken spot by control
 
-#game variables
+#game display variables
 GAME_MAX_QBITS = 2
-GAME_MAX_GATES = 9
+GAME_MAX_GATES = 13
 
 WINDOW_SIZE_HEIGHT = 750
 WINDOW_SIZE_WIDTH = 1000
 GAME_WINDOW_TITLE = "Q-Chess Game"
 
-QBIT_HEIGHT = [250, 500]
+QBIT_HEIGHT = [340, 410]
 
 PRESET_FRAMERATE = 60
+
+GATE_WIDTH_FULL = 50
+GATE_WIDTH_HALF = 25
+GATE_HEIGHT_HALF = 25
+GATE_DIST = 20
+
+CONTROL_CIRCLE_SIZE = 10
 
 #colors
 WHITE = (255, 255, 255)

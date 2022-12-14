@@ -21,8 +21,9 @@ def main():
                 exit = True
 
         screen.fill(OFF_WHITE)
-        pygame.draw.line(screen, BLACK, (0, QBIT_HEIGHT[0]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[0]))
-        pygame.draw.line(screen, BLACK, (0, QBIT_HEIGHT[1]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[1]))
+        pygame.draw.line(screen, BLACK, (0, QBIT_HEIGHT[0]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[0]), 2)
+        pygame.draw.line(screen, BLACK, (0, QBIT_HEIGHT[1]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[1]), 2)
+        grid.draw(screen)
 
         pygame.display.flip()
         pygame.display.update()

@@ -42,8 +42,13 @@ class CircuitGrid:
         gate = self.gates[y][x]
         ctrl = self.gates[control][x]
         #cannot set self to self
-        if gate.type == type and gate.control[1] == control:
-            return False
+        if gate.type == type:
+            if gate.control[1] == control:
+                return False
+            else:
+                self.clear_gate(x, y)
+                return self.set_gate(type, x, y, control)
+
 
         #cannot set control to self
         if control is y:

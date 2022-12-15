@@ -32,6 +32,7 @@ def main():
     dfont = pygame.font.SysFont("timesnewroman", FONT_SIZE)
     efont = pygame.font.SysFont("timesnewroman", E_FONT_SIZE)
     key_press_counter = 0
+    last_counts = {'00': 0, '01': 0, '10': 0, '11': 0}
     while not exit:
         events = pygame.event.get()
 
@@ -100,6 +101,7 @@ def main():
                     counts = grid.run_circuit()
                     for key in counts.keys():
                         print(key, ": ", counts[key])
+                        last_counts[key] = counts[key]
                         if key == '11':
                             other_lives -= counts[key]
                             player_lives -= counts[key]
@@ -118,15 +120,18 @@ def main():
             screen.fill(OFF_WHITE)
             if player_turn:
                 screen.blit(dfont.render(PLAYER_ONE_MESSAGE , False, BLUE), (PLAYER_TURN_DISPLAY_X, PLAYER_TURN_DISPLAY_Y))
+                pygame.draw.line(screen, RED, (0, QBIT_HEIGHT[0]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[0]), OFF_LINE_LENGTH)
+                pygame.draw.line(screen, BLUE, (0, QBIT_HEIGHT[1]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[1]), TURN_LINE_LENGTH)
             else:
                 screen.blit(dfont.render(PLAYER_ZERO_MESSAGE, False, RED), (PLAYER_TURN_DISPLAY_X, PLAYER_TURN_DISPLAY_Y))
+                pygame.draw.line(screen, RED, (0, QBIT_HEIGHT[0]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[0]), TURN_LINE_LENGTH)
+                pygame.draw.line(screen, BLUE, (0, QBIT_HEIGHT[1]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[1]), OFF_LINE_LENGTH)
 
             screen.blit(dfont.render(LIVES_MESSAGE, False, BLACK), (LIVES_DISPLAY_X, LIVES_DISPLAY_Y))
             screen.blit(dfont.render(PLAYER_ZERO + ": " + str(other_lives), False, RED), (LIVES_DISPLAY_X, LIVES_DISPLAY_Y + LIVES_DISPLAY_DROP))
             screen.blit(dfont.render(PLAYER_ONE +  ": " + str(player_lives), False, BLUE), (LIVES_DISPLAY_X, LIVES_DISPLAY_Y + 2 * LIVES_DISPLAY_DROP))
 
-            pygame.draw.line(screen, RED, (0, QBIT_HEIGHT[0]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[0]), 2)
-            pygame.draw.line(screen, BLUE, (0, QBIT_HEIGHT[1]), (WINDOW_SIZE_WIDTH, QBIT_HEIGHT[1]), 2)
+                
             grid.draw(screen)
 
             screen.blit(image_cursor, grid_to_coords(cursor))

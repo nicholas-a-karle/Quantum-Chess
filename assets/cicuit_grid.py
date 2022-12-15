@@ -69,9 +69,13 @@ class CircuitGrid:
         return True
 
     def clear_gate(self, x = 0, y = 0):
+        if self.gates[y][x].type == EMPTY and self.gates[y][x].control == EMPTY_COORDS:
+            return False
         if self.gates[y][x].control is not EMPTY_COORDS:
             self.gates[self.gates[y][x].control[1]][self.gates[y][x].control[0]] = Gate(EMPTY, (x, y), EMPTY_COORDS)
         self.gates[y][x] = Gate(EMPTY, (x, y), EMPTY_COORDS)
+
+        return True
 
     def run_circuit(self, simulate = True):
         c = QuantumCircuit(self.num_qbits, self.num_qbits)

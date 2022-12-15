@@ -50,12 +50,15 @@ TIE_DEFEAT = "BOTH PLAYERS LOSE!!!"
 END_MESSAGE_OFFSET_X = 200
 END_MESSAGE_OFFSET_Y = 50
 
+TURN_LINE_LENGTH = 4
+OFF_LINE_LENGTH = 2
+
 #game control variables
-CYCLES_PER_PRESS = 5 #small as to account for rapid clicking
+CYCLES_PER_PRESS = 10 #small as to account for rapid clicking
 
 #game variables
 SHOTS_IN_SIM = 30
-LIVES_PER_SHOT = 10
+LIVES_PER_SHOT = 5
 
 #colors
 WHITE = (255, 255, 255)

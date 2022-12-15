@@ -9,6 +9,7 @@ image_x = pygame.image.load("assets/images/gate_images/x_gate.png")
 image_y = pygame.image.load("assets/images/gate_images/y_gate.png")
 image_z = pygame.image.load("assets/images/gate_images/z_gate.png")
 image_t = pygame.image.load("assets/images/gate_images/t_gate.png")
+backend = Aer.get_backend("qasm_simulator")
 
 class Gate:
     def __init__(self, type = EMPTY, target = EMPTY_COORDS, control = EMPTY_COORDS):
@@ -40,6 +41,9 @@ class CircuitGrid:
     def set_gate(self, type = EMPTY, x = 0, y = 0, control = EMPTY):
         gate = self.gates[y][x]
         ctrl = self.gates[control][x]
+        #cannot set self to self
+        if gate.type == type and gate.control[1] == control:
+            return False
 
         #cannot set control to self
         if control is y:
@@ -60,12 +64,12 @@ class CircuitGrid:
         return True
 
     def clear_gate(self, x = 0, y = 0):
+        if self.gates[y][x].control is not EMPTY_COORDS:
+            self.gates[self.gates[y][x].control[1]][self.gates[y][x].control[0]] = Gate(EMPTY, (x, y), EMPTY_COORDS)
         self.gates[y][x] = Gate(EMPTY, (x, y), EMPTY_COORDS)
 
-        
-
-    def construct_circuit(self):
-        c = QuantumCircuit(self.num_qbits)
+    def run_circuit(self, simulate = True):
+        c = QuantumCircuit(self.num_qbits, self.num_qbits)
         for qbit in self.gates:
             for gate in qbit:
                 target = gate.target[1]
@@ -104,6 +108,16 @@ class CircuitGrid:
                         c.t(target)
                 else:
                     print("ERROR")
+        for i in range(self.num_qbits):
+            c.measure(i, i)
+        # now circuit can be run on simulation or real deal
+        if (simulate):
+            print("Simulating QC")
+            job = backend.run(c, shots=SHOTS_IN_SIM)
+            result = job.result()
+            return result.get_counts(c)
+        else:
+            print("Sending to QC")
 
     def draw(self, surface):
         for x in range(self.max_gates):
@@ -132,11 +146,6 @@ class CircuitGrid:
                     GATE_DIST + (GATE_DIST + GATE_WIDTH_FULL) * cn + GATE_WIDTH_HALF,
                     qbhc
                     )
-
-                
-                print("Gate:", self.gates[y][x].type, self.gates[y][x].target, self.gates[y][x].control)
-                print(GATE_WIDTH_FULL, "by", GATE_HEIGHT_HALF * 2, "box at", tc)
-                print("Line from", ctrlo, "to", ctrle)
 
                 if self.gates[y][x].control is not EMPTY_COORDS:
                     pygame.draw.line(surface, BLACK, ctrlo, ctrle, 1)

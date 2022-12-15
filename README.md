@@ -8,15 +8,11 @@
 #       
 
 #   Gameplay Outline
-       goal is to force other player to be measured at 1 without you measuring at 1
-       rules:
-           take turns applying H, T, CX, X, Y, and Z gates to eachother
-               *CX may go either way
-           may call for measurement at any point, if they measure and 1 and you at 0, you score
-           otherwise, continue game as if nothing happened
-                   *to call for measurement, both players must have placed the same number of gates
-                   *caller is measured first
-           max number of gates is 9
+    Each player starts with 150 lives
+    Each player can create a quantum circuit which is run 30 times at each measurement
+    Each time their bit is resolved to a 1, they lose a life
+    Only the second player may run and measure the circuit
+    The game ends when one or both players goes below 1 life
 
 # Credit
-    Usage of QPong assets from Qiskit
+    Usage of some QPong assets from Qiskit

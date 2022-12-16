@@ -1,31 +1,38 @@
 import pygame
 
-def draw_histogram(surface, histogram_data, histogram_location, histogram_end, spacing = 0.05):
-    #histogram data should be dictionary with numeric values
-    #histogram location should be (x, y)
-    #histogram end should be (x, y)
-    #spacing is % of bar which is displayed empty
-    max = 0
-    num = 0
+from assets.globals import *
 
-    x0 = histogram_location[0]
-    y0 = histogram_location[1]
-    x1 = histogram_end[0]
-    y1 = histogram_end[1]
-    hist_width = x1 - x0
-    hist_height = y1 - y0
+def draw_histogram(surface, histogram_data, histogram_location, histogram_end, hfont, spacing = 0.05, text_space = 0.05, box = True):
+    hist_width = histogram_end[0] - histogram_location[0]
+    chart_height = histogram_end[1] - histogram_location[1]
+    hist_height = chart_height * (1 - text_space)
+    dlen = len(histogram_data)
+    dmax = max(histogram_data.values())
 
-    x = x0
-    y = y0
+    if box:
+        pygame.draw.rect(surface, BLACK, (histogram_location[0], histogram_location[1], hist_width, hist_height), 1, 1)
+        pygame.draw.rect(surface, BLACK, (histogram_location[0], histogram_location[1], hist_width, chart_height), 1, 1)
+    if dlen == 0 or dmax == 0:
+        return
 
-    for key in histogram_data:
-        num += 1
-        if histogram_data[key] > max:
-            max = histogram_data[key]
+    bar_interval = (hist_width / dlen)
+    bar_width = (1 - spacing) * bar_interval
+    unit_height = hist_height / dmax
+
+    x = histogram_location[0] + (bar_interval - bar_width) / 2
+    y = histogram_end[1]
+
     
-    bar_width = (1-spacing) * hist_width
-    unit_height = hist_height / num
 
-    for key in histogram_data:
+    for key in histogram_data.keys():
         value = histogram_data[key]
+        pygame.draw.rect(surface, GRAY, (x, y-unit_height*value, bar_width, unit_height*value))
+        x += bar_interval/2
+        surface.blit(hfont.render(key, False, BLACK), (x, y + text_space * chart_height / 2))
+        x += bar_interval/2
+
+
+
+    
+
 

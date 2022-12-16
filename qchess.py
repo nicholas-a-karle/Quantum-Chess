@@ -2,6 +2,7 @@ import pygame
 from qiskit import *
 from assets.globals import *
 from assets.cicuit_grid import *
+from assets.display_utils import *
 
 image_cursor = pygame.image.load("assets/images/cursor_images/circuit-grid-cursor.png")
 image_select = pygame.image.load("assets/images/cursor_images/circuit-grid-select.png")
@@ -31,6 +32,7 @@ def main():
     other_lives = SHOTS_IN_SIM * LIVES_PER_SHOT
     dfont = pygame.font.SysFont("timesnewroman", FONT_SIZE)
     efont = pygame.font.SysFont("timesnewroman", E_FONT_SIZE)
+    hfont = pygame.font.SysFont("timesnewroman", H_FONT_SIZE)
     key_press_counter = 0
     last_counts = {'00': 0, '01': 0, '10': 0, '11': 0}
     while not exit:
@@ -91,14 +93,15 @@ def main():
                 if ((cursor[0] is selector[0] and cursor[1] is selector[1]) or keys[pygame.K_DELETE]):
                     selector = [-1, -1]
             elif keys[pygame.K_c]:
-                if grid.set_gate(sel_gate_type, selector[0], selector[1], cursor[1]):
-                    player_turn = not player_turn
-                    key_press_counter = CYCLES_PER_PRESS
+                if selector is not EMPTY_COORDS:
+                    if grid.set_gate(sel_gate_type, selector[0], selector[1], cursor[1]):
+                        player_turn = not player_turn
+                        key_press_counter = CYCLES_PER_PRESS
             elif keys[pygame.K_m]:
                 #only the second player can call for measurement
                 if (player_turn):
                     player_turn = not player_turn
-                    counts = grid.run_circuit()
+                    counts = grid.run_circuit(SHOTS_IN_SIM)
                     for key in counts.keys():
                         print(key, ": ", counts[key])
                         last_counts[key] = counts[key]
@@ -130,11 +133,16 @@ def main():
             screen.blit(dfont.render(LIVES_MESSAGE, False, BLACK), (LIVES_DISPLAY_X, LIVES_DISPLAY_Y))
             screen.blit(dfont.render(PLAYER_ZERO + ": " + str(other_lives), False, RED), (LIVES_DISPLAY_X, LIVES_DISPLAY_Y + LIVES_DISPLAY_DROP))
             screen.blit(dfont.render(PLAYER_ONE +  ": " + str(player_lives), False, BLUE), (LIVES_DISPLAY_X, LIVES_DISPLAY_Y + 2 * LIVES_DISPLAY_DROP))
+            
+            draw_histogram(screen, last_counts, (HISTOGRAM_X0, HISTOGRAM_Y0), (HISTOGRAM_X1, HISTOGRAM_Y1), hfont)
 
-                
             grid.draw(screen)
 
             screen.blit(image_cursor, grid_to_coords(cursor))
+
+            #pygame.draw.circle(screen, YELLOW, (HISTOGRAM_X0, HISTOGRAM_Y0), 5)
+            #pygame.draw.circle(screen, ORANGE, (HISTOGRAM_X1, HISTOGRAM_Y1), 5)
+            #pygame.draw.rect(screen, GREEN, (HISTOGRAM_X0, HISTOGRAM_Y0, HISTOGRAM_X1-HISTOGRAM_X0, HISTOGRAM_Y1-HISTOGRAM_Y0), 1, 1)
 
             if (selector is not [-1, -1]):
                 screen.blit(image_select, grid_to_coords(selector))

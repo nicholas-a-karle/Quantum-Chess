@@ -77,7 +77,7 @@ class CircuitGrid:
 
         return True
 
-    def run_circuit(self, simulate = True):
+    def run_circuit(self, shots, simulate = True):
         c = QuantumCircuit(self.num_qbits, self.num_qbits)
         for qbit in self.gates:
             for gate in qbit:
@@ -122,7 +122,7 @@ class CircuitGrid:
         # now circuit can be run on simulation or real deal
         if (simulate):
             print("Simulating QC")
-            job = backend.run(c, shots=SHOTS_IN_SIM)
+            job = backend.run(c, shots=shots)
             result = job.result()
             return result.get_counts(c)
         else:

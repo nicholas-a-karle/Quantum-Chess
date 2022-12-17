@@ -11,6 +11,7 @@
 
 #
     Quantum Chess is a game played on two QBits with the X, Y, Z, T, and H gates, which can all be implemented with a single control. One GBit represents Player Zero and the other represents Player One. The reason for the name is that due to the nature of the game, each player has an equal number of actions they can perform up until a measurement. This causes the game to have to be played with sorts of traps I felt were similar to analagous moves in Chess.
+
 #   Controls
     Gates
     X - Place pauli-z-gate at cursor
@@ -34,5 +35,10 @@
     Only the second player may run and measure the circuit, but they lose that turn
     The game ends when one or both players goes below 1 life
 
+#   How to start
+    in console:
+        python qchess.py
+
 # Credit
     Usage of some QPong assets from Qiskit
+    Usage of libaries
